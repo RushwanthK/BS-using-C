@@ -1,0 +1,521 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<ctype.h>
+int count=0;
+
+struct node
+{
+    struct node *prev;
+    char fname[60];
+    char lname[60];
+    char acc_no[10];
+    int age;
+    char address[60];
+    char citizenship[15];
+    char phone[10];
+    float amt;
+    struct node *next;
+}*first=NULL,*last=NULL,*temp=NULL,*temp1=NULL;
+
+void create()
+{
+    int flag=0;
+    int i;
+    char acc_no[10];
+    char fname[60];
+    char lname[60];
+    int age;
+    char address[60];
+    char citizenship[15];
+    char phone[10];
+    float amt;
+    temp=(struct node *)malloc(sizeof(struct node));
+    printf("\t\t\t ADD RECORD  ");
+    printf("\n\n**IMPORTANT NOTE: while entering names and addresses DO NOT Enter SPACES between.\n\n");
+
+    line1:
+    printf("\nEnter 8 digit account number:");
+    scanf("%s",temp->acc_no);
+    if(strlen(temp->acc_no)==8)
+    {
+        for (i = 0; i<8 ; i++)
+        {
+            if(isalpha(temp->acc_no[i])!=0)
+            {
+                flag=1;
+                break;
+            }
+            else
+                flag=0;
+        }
+        if(flag==1)
+        {
+            printf("Wrong Input... \n Try again\n ");
+            goto line1;
+        }
+        else
+            goto line2;
+    }
+    else
+    {
+        printf("Wrong Input... \n Try again\n ");
+        goto line1;
+    }
+
+    line2:
+    printf("\nEnter first name:");
+    scanf("%s",temp->fname);
+    printf("\nEnter last name:");
+    scanf("%s",temp->lname);
+    printf("\nEnter the age:");
+    scanf("%d",&temp->age);
+    printf("\nEnter the address:");
+    scanf("%s",temp->address);
+
+    line3:
+    printf("\nEnter the Aadhar number(12 digits): ");
+    scanf("%s",temp->citizenship);
+    if(strlen(temp->citizenship)==12)
+    {
+        for (i = 0; i<12 ; i++)
+        {
+            if(isalpha(temp->citizenship[i])!=0)
+            {
+                flag=1;
+                break;
+            }
+            else
+                flag=0;
+        }
+        if(flag==1)
+        {
+            printf("Wrong Input... \n Try again\n ");
+            goto line3;
+        }
+        else
+            goto line4;
+    }
+    else
+    {
+        printf("Wrong Input... \n Try again\n ");
+        goto line3;
+    }
+
+    line4:
+    printf("\nEnter the phone number(10 digits): ");
+    scanf("%s",temp->phone);
+    if(strlen(temp->phone)==10)
+    {
+        for (i = 0; i<10 ; i++)
+        {
+            if(isalpha(temp->phone[i])!=0)
+            {
+                flag=1;
+                break;
+            }
+            else
+                flag=0;
+        }
+        if(flag==1)
+        {
+            printf("Wrong Input... \n Try again\n ");
+            goto line4;
+        }
+        else
+            goto line6;
+    }
+    else
+    {
+        printf("Wrong Input... \n Try again\n ");
+        goto line4;
+    }
+
+    line6:
+    printf("\nEnter the amount to deposit:Rs.");
+    scanf("%f",&temp->amt);
+    temp->prev=NULL;
+    temp->next=NULL;
+    count++;
+}
+
+void insertatfirst()
+{
+    create();
+    if(first==NULL)
+    {
+        first=temp;
+        last=first;
+    }
+    else
+    {
+        first->prev=temp;
+        temp->next=first;
+        first=temp;
+    }
+}
+
+void display()
+{
+    if(first==NULL)
+    {
+        printf("\nNo Accounts\n");
+        return;
+    }
+    else
+    {
+        temp=first;
+        printf("\nACC. NO.\tNAME\t\tAGE\tAADHAR No.\tADDRESS\t\t\tPHONE\t\tBALANCE\n");
+        while(temp!=NULL)
+        {
+            printf("\n%s\t %8s %s\t%d\t%s\t%8s\t%s\tRs.%f",temp->acc_no,temp->fname,temp->lname,temp->age,temp->citizenship,temp->address,temp->phone,temp->amt);
+            temp=temp->next;
+            printf("\n");
+        }
+    }
+}
+
+void edit()
+{
+    printf("\n\n**IMPORTANT NOTE: while entering names and addresses DO NOT Enter SPACES between.\n\n");
+    int f=0;
+    char nwfname[60];
+    char nwlname[60];
+    char nwphone[10];
+    char nwcitizenship[12];
+    char nwaddress[60];
+    char ac_no[10];
+    int ed,nwage,i,flag=0;
+    temp=first;
+    printf("\nEnter acc no. to edit details\n");
+    scanf("%s",ac_no);
+    while(temp!=NULL)
+    {
+        if(strcmp(ac_no,temp->acc_no)==0)
+        {
+            f=1;
+            break;
+        }
+        temp=temp->next;
+    }
+    if(f==1)
+    {
+            printf("\t1.To edit name\n");
+            printf("\t2.To edit age\n");
+            printf("\t3.To edit address\n");
+            printf("\t4.To edit phone number\n");
+            printf("\t5.To edit Aadhar number\n");
+            printf("\tEnter your choice ");
+            scanf("%d",&ed);
+            switch(ed)
+            {
+               case 1 : printf("\t\nEnter first name: ");
+                        scanf("%s",nwfname);
+                        strcpy(temp->fname,nwfname);
+                        printf("\t\nEnter last name: ");
+                        scanf("%s",nwlname);
+                        strcpy(temp->lname,nwlname);
+                        printf("\n Changes Saved.\n");
+                        return;
+                   break;
+               case 2 : printf("\t\nEnter new age: ");
+                        scanf("%d",&nwage);
+                        temp->age=nwage;
+                        printf("\n Changes Saved.\n");
+                        return;
+                   break;
+               case 3 : printf("\t\nEnter new address: ");
+                        scanf("%s",nwaddress);
+                        strcpy(temp->address,nwaddress);
+                        printf("\n Changes Saved.\n");
+                        return;
+                   break;
+               case 4 : LINE1:
+                        printf("\t\nEnter new phone number(10 digits): ");
+                        scanf("%s",nwphone);
+                        if(strlen(nwphone)==10)
+                        {
+                           for (i = 0; i<10 ; i++)
+                           {
+                              if(isalpha(nwphone[i])!=0)
+                              {
+                                 flag=1;
+                                 break;
+                              }
+                              else
+                                flag=0;
+                           }
+                           if(flag==1)
+                           {
+                              printf("Wrong Input... \n Try again\n ");
+                              goto LINE1;
+                           }
+                           else
+                             goto LINE2;
+                        }
+                        else
+                        {
+                           printf("Wrong Input... \n Try again\n ");
+                           goto LINE1;
+                        }
+                        LINE2:
+                        strcpy(temp->phone,nwphone);
+                        printf("\n Changes Saved.\n");
+                        return;
+                   break;
+               case 5: LINE3:
+                        printf("\t\nEnter new Aadhar number(12 digits): ");
+                        scanf("%s",nwcitizenship);
+                        if(strlen(nwcitizenship)==12)
+                        {
+                           for (i = 0; i<12 ; i++)
+                           {
+                              if(isalpha(nwcitizenship[i])!=0)
+                              {
+                                 flag=1;
+                                 break;
+                              }
+                              else
+                                flag=0;
+                           }
+                           if(flag==1)
+                           {
+                              printf("Wrong Input... \n Try again\n ");
+                              goto LINE3;
+                           }
+                           else
+                             goto LINE4;
+                        }
+                        else
+                        {
+                           printf("Wrong Input... \n Try again\n ");
+                           goto LINE3;
+                        }
+                        LINE4:
+                        strcpy(temp->citizenship,nwcitizenship);
+                        printf("\n Changes Saved.\n");
+                        return;
+                   break;
+               default: printf("\n Invail choice... \n try again\n");
+            }
+    }
+    else
+        {
+           printf("\nAccount number does not exist.\n");
+        }
+}
+
+void depositamt()
+{
+    int f=0;
+    float dep=0;
+    char ac_no[10];
+    temp=first;
+    printf("\nEnter acc no. to deposit\n");
+    scanf("%s",ac_no);
+    while(temp!=NULL)
+    {
+        if(strcmp(ac_no,temp->acc_no)==0)
+        {
+            f=1;
+            break;
+        }
+        temp=temp->next;
+    }
+    if(f==1)
+    {
+            printf("\n%s\t %10s %s\tRs.%f\n",temp->acc_no,temp->fname,temp->lname,temp->amt);
+            printf("\nEnter amt to deposit\n");
+            scanf("%f",&dep);
+            temp->amt=temp->amt+dep;
+            printf("\n%s\t %10s %s\tRs.%f\n",temp->acc_no,temp->fname,temp->lname,temp->amt);
+    }
+    else
+        printf("\nAccount number does not exist.\n");
+}
+
+void withdrawamt()
+{
+    int f=0;
+    float wit=0;
+    char ac_no[10];
+    temp=first;
+    printf("\nEnter acc no. to withdraw\n");
+    scanf("%s",ac_no);
+    while(temp!=NULL)
+    {
+        if(strcmp(ac_no,temp->acc_no)==0)
+        {
+            f=1;
+            break;
+        }
+        temp=temp->next;
+    }
+    if(f==1)
+    {
+            printf("\n%s\t %10s %s\tRs.%f\n",temp->acc_no,temp->fname,temp->lname,temp->amt);
+            retry:
+            printf("\nEnter amt to withdraw\n");
+            scanf("%f",&wit);
+            if(wit>temp->amt)
+            {
+                printf("\nInsufficient balance... retry with amount lesser than your balance\n");
+                goto retry;
+            }
+            else
+            {
+                temp->amt=temp->amt-wit;
+                printf("\n%s\t %10s %s\tRs.%f",temp->acc_no,temp->fname,temp->lname,temp->amt);
+            }
+    }
+    else
+        printf("\nAccount number does not exist.\n");
+}
+
+void delaccfront()
+{
+    temp=first;
+    if(first==NULL)
+    {
+        printf("\nNo Accounts to delete\n");
+        return;
+    }
+    if(temp->next==NULL)
+    {
+        printf("\nAccount deleted is \n");
+        printf("\n%s\t%8s %s\t%s\tRs.%f\n",temp->acc_no,temp->fname,temp->lname,temp->phone,temp->amt);
+        free(temp);
+        first=NULL;
+    }
+    else
+    {
+        first=temp->next;
+        printf("\nAccount deleted is \n");
+        printf("\n%s\t%8s %s\t%s\tRs.%f\n",temp->acc_no,temp->fname,temp->lname,temp->phone,temp->amt);
+        free(temp);
+        first->prev=NULL;
+    }
+}
+
+void delaccend()
+{
+    temp=first;
+    if(first==NULL)
+    {
+        printf("\nNO Accounts to delete\n");
+        return;
+
+    }
+    if(temp->next==NULL)
+    {
+        printf("\nAccount deleted is \n");
+        printf("\n%s\t%8s %s\t%s\tRs.%f\n",temp->acc_no,temp->fname,temp->lname,temp->phone,temp->amt);
+        free(temp);
+        first=NULL;
+
+    }
+    else
+    {
+        temp1=last->prev;
+        printf("\nAccount deleted is \n");
+        printf("\n%s\t%8s %s\t%s\tRs.%f\n",last->acc_no,last->fname,last->lname,last->phone,last->amt);
+        free(last);
+        last=temp1;
+        last->next=NULL;
+
+    }
+}
+
+
+void delacc()
+{
+    int f=0;
+    temp=first;
+    if(first==NULL)
+    {
+       printf("\n No Accounts to delete\n");
+       return;
+    }
+    if(temp->next==NULL)
+    {
+       printf("\nAccount deleted is \n");
+       printf("\n%s\t%8s %s\t%s\tRs.%f\n",temp->acc_no,temp->fname,temp->lname,temp->phone,temp->amt);
+       free(temp);
+       first=NULL;
+       return;
+    }
+    char ac_no[10];
+    printf("\nEnter Acc no. to delete \n");
+    scanf("%s",ac_no);
+    while(temp!=NULL)
+    {
+        if(strcmp(ac_no,temp->acc_no)==0)
+        {
+            f=1;
+            if(temp->prev==NULL)
+            {
+                delaccfront();
+                break;
+            }
+            if(temp->next==NULL)
+            {
+                delaccend();
+                break;
+            }
+            else
+                {
+                    printf("\nAccount deleted is \n");
+                    printf("\n%s\t%8s %s\t%s\tRs.%f\n",temp->acc_no,temp->fname,temp->lname,temp->phone,temp->amt);
+                    temp->prev->next=temp->next;
+                    temp->next->prev=temp->prev;
+                    free(temp);
+                    break;
+                }
+         }
+         else
+            temp=temp->next;
+    }
+    if(f==1)
+        printf("\nSuccessfully deleted...\n");
+    else
+        printf("\nAccount does not exist.\n");
+}
+
+void main()
+{
+    int ch,i,n;
+    int choice;
+
+    printf("\n\n\t\t\tCUSTOMER BANKING ACCOUNTS MANAGEMENT SYSTEM");
+    printf("\n\n\n\t\t\t WELCOME TO THE MAIN MENU ");
+    while(1)
+    {
+        printf("\n\n\t\t1.Create N number of new accounts\n\t\t2.Add another account\n\t\t3.View accounts list\n\t\t4.To Edit account details\n\t\t5.Deposit amount\n\t\t6.Withdraw amount\n\t\t7.Delete account\n\t\t8.Exit\n\n\n\n\n\t\t Enter your choice:");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1 : printf("\nEnter the value of n : ");
+            scanf("%d",&n);
+            for(i=0;i<n;i++)
+            {
+                insertatfirst();
+            }
+            break;
+            case 2 : insertatfirst();
+            break;
+            case 3 : display();
+            break;
+            case 4 : edit();
+            break;
+            case 5 : depositamt();
+            break;
+            case 6 : withdrawamt();
+            break;
+            case 7 : delacc();
+            break;
+            case 8 : exit(1);
+            break;
+            default: printf("\n Incorrect input...\n");
+        }
+    }
+}
